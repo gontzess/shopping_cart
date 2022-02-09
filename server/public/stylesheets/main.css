@@ -105,6 +105,7 @@ h3 {
   background: #ccc;
   color: #fff;
   cursor: auto;
+  pointer-events: none;
 }
 
 .button.checkout {

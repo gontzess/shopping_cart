@@ -6,6 +6,11 @@ const AddForm = ({ onAddProduct }) => {
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
 
+  const handleToggleForm = (e) => {
+    e.preventDefault();
+    updateShowForm(!showForm);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     onAddProduct({ title, price, quantity });
@@ -16,19 +21,20 @@ const AddForm = ({ onAddProduct }) => {
   };
 
   return (
-    <div class={showForm ? "add-form visible" : "add-form"}>
+    <div className={showForm ? "add-form visible" : "add-form"}>
       <p>
         <a
-          class="button add-product-button"
-          onClick={() => updateShowForm(!showForm)}
+          href="/#"
+          className="button add-product-button"
+          onClick={handleToggleForm}
         >
           Add A Product
         </a>
       </p>
       <h3>Add Product</h3>
       <form>
-        <div class="input-group">
-          <label for="product-name">Product Name</label>
+        <div className="input-group">
+          <label htmlFor="product-name">Product Name</label>
           <input
             onChange={(e) => setTitle(e.target.value)}
             type="text"
@@ -37,8 +43,8 @@ const AddForm = ({ onAddProduct }) => {
           />
         </div>
 
-        <div class="input-group">
-          <label for="product-price">Price</label>
+        <div className="input-group">
+          <label htmlFor="product-price">Price</label>
           <input
             onChange={(e) => setPrice(e.target.value)}
             type="text"
@@ -47,8 +53,8 @@ const AddForm = ({ onAddProduct }) => {
           />
         </div>
 
-        <div class="input-group">
-          <label for="product-quantity">Quantity</label>
+        <div className="input-group">
+          <label htmlFor="product-quantity">Quantity</label>
           <input
             onChange={(e) => setQuantity(e.target.value)}
             type="text"
@@ -57,11 +63,11 @@ const AddForm = ({ onAddProduct }) => {
           />
         </div>
 
-        <div class="actions form-actions">
-          <a onClick={handleSubmit} class="button">
+        <div className="actions form-actions">
+          <a href="/#" onClick={handleSubmit} className="button">
             Add
           </a>
-          <a onClick={() => updateShowForm(!showForm)} class="button">
+          <a href="/#" onClick={handleToggleForm} className="button">
             Cancel
           </a>
         </div>

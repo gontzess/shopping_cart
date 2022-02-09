@@ -1,39 +1,55 @@
-const Cart = () => {
-  // const [cartData, updateCartData] = useState([]);
-  return (
-    <div class="cart">
-      <h2>Your Cart</h2>
-      <p>Your cart is empty</p>
-      <p>Total: $0</p>
-      <a class="button checkout disabled">Checkout</a>
-    </div>
+const Cart = ({ cartData, onCheckout }) => {
+  const handleCheckout = (e) => {
+    e.preventDefault();
+    onCheckout();
+  };
 
-    //   <div class="cart">
-    //   <h2>Your Cart</h2>
-    //   <table class="cart-items">
-    //     <tr>
-    //       <th>Item</th>
-    //       <th>Quantity</th>
-    //       <th>Price</th>
-    //     </tr>
-    //     <tr>
-    //       <td>Amazon Kindle E-reader</td>
-    //       <td>2</td>
-    //       <td>$79.99</td>
-    //     </tr>
-    //     <tr>
-    //       <td>Apple 10.5-Inch iPad Pro</td>
-    //       <td>1</td>
-    //       <td>$649.99</td>
-    //     </tr>
+  if (cartData.length === 0) {
+    return (
+      <div className="cart">
+        <h2>Your Cart</h2>
+        <p>Your cart is empty</p>
+        <p>Total: $0</p>
+        <a href="/#" className="button checkout disabled">
+          Checkout
+        </a>
+      </div>
+    );
+  } else {
+    return (
+      <div className="cart">
+        <h2>Your Cart</h2>
+        <table className="cart-items">
+          <tbody>
+            <tr>
+              <th>Item</th>
+              <th>Quantity</th>
+              <th>Price</th>
+            </tr>
+            {cartData.map((item) => (
+              <tr key={item._id}>
+                <td>{item.title}</td>
+                <td>{item.quantity}</td>
+                <td>${item.price}</td>
+              </tr>
+            ))}
 
-    //     <tr>
-    //       <td colspan="3" class="total">Total: $729.98</td>
-    //     </tr>
-    //   </table>
-    //   <a class="button checkout">Checkout</a>
-    // </div>
-  );
+            <tr>
+              <td colSpan="3" className="total">
+                Total: $
+                {cartData
+                  .reduce((acc, item) => (acc += item.price), 0)
+                  .toFixed(2)}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <a onClick={handleCheckout} href="/#" className="button checkout">
+          Checkout
+        </a>
+      </div>
+    );
+  }
 };
 
 export default Cart;

@@ -3,10 +3,10 @@ import axios from "axios";
 import AddForm from "./AddForm.js";
 import Cart from "./Cart.js";
 import Products from "./Products.js";
-import data from "../lib/data.js";
 
 const App = () => {
   const [productData, updateProductData] = useState([]);
+  const [cartData, updateCartData] = useState([]);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -16,6 +16,53 @@ const App = () => {
     };
     getProducts();
   }, []);
+
+  useEffect(() => {
+    const getCart = async () => {
+      const response = await axios.get("/api/cart");
+      const dbData = response.data;
+      updateCartData(dbData);
+    };
+    getCart();
+  }, []);
+
+  const handleCheckout = async () => {
+    await axios.post("/api/checkout");
+    updateCartData([]);
+  };
+
+  const handleAddToCart = async (productId) => {
+    const response = await axios.post("/api/add-to-cart", { productId });
+    const { product, item } = response.data;
+    let cartItemFound = false;
+
+    updateProductData(
+      productData.map((prod) => {
+        if (prod._id === product._id) {
+          return product;
+        } else {
+          return prod;
+        }
+      })
+    );
+
+    const updatedCart = cartData.map((cartItem) => {
+      if (cartItem._id === item._id) {
+        cartItemFound = true;
+        return item;
+      } else {
+        return cartItem;
+      }
+    });
+
+    console.log(cartItemFound);
+
+    if (!cartItemFound) {
+      updateCartData(cartData.concat(item));
+    } else {
+      updateCartData(updatedCart);
+    }
+  };
 
   const handleEditProduct = async (id, toBeUpdated) => {
     const response = await axios.put(`/api/products/${id}`, toBeUpdated);
@@ -49,12 +96,13 @@ const App = () => {
     <div id="app">
       <header>
         <h1>The Shop!</h1>
-        <Cart />
+        <Cart cartData={cartData} onCheckout={handleCheckout} />
       </header>
 
       <main>
         <Products
           products={productData}
+          onAddToCart={handleAddToCart}
           onEditProduct={handleEditProduct}
           onDeleteProduct={handleDeleteProduct}
         />
