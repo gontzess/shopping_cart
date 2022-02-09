@@ -20,60 +20,67 @@ const AddForm = ({ onAddProduct }) => {
     updateShowForm(!showForm);
   };
 
-  return (
-    <div className={showForm ? "add-form visible" : "add-form"}>
-      <p>
-        <a
-          href="/#"
-          className="button add-product-button"
-          onClick={handleToggleForm}
-        >
-          Add A Product
-        </a>
-      </p>
-      <h3>Add Product</h3>
-      <form>
-        <div className="input-group">
-          <label htmlFor="product-name">Product Name</label>
-          <input
-            onChange={(e) => setTitle(e.target.value)}
-            type="text"
-            id="product-name"
-            value={title}
-          />
-        </div>
-
-        <div className="input-group">
-          <label htmlFor="product-price">Price</label>
-          <input
-            onChange={(e) => setPrice(e.target.value)}
-            type="text"
-            id="product-price"
-            value={price}
-          />
-        </div>
-
-        <div className="input-group">
-          <label htmlFor="product-quantity">Quantity</label>
-          <input
-            onChange={(e) => setQuantity(e.target.value)}
-            type="text"
-            id="product-quantity"
-            value={quantity}
-          />
-        </div>
-
-        <div className="actions form-actions">
-          <a href="/#" onClick={handleSubmit} className="button">
-            Add
+  if (!showForm) {
+    return (
+      <div className="add-form">
+        <p>
+          <a
+            href="/#"
+            className="button add-product-button"
+            onClick={handleToggleForm}
+          >
+            Add A Product
           </a>
-          <a href="/#" onClick={handleToggleForm} className="button">
-            Cancel
-          </a>
-        </div>
-      </form>
-    </div>
-  );
+        </p>
+      </div>
+    );
+  } else {
+    return (
+      <div className="add-form visible">
+        <h3>Add Product</h3>
+        <form>
+          <div className="input-group">
+            <label htmlFor="product-name">Product Name</label>
+            <input
+              onChange={(e) => setTitle(e.target.value)}
+              type="text"
+              id="product-name"
+              value={title}
+            />
+          </div>
+
+          <div className="input-group">
+            <label htmlFor="product-price">Price</label>
+            <input
+              onChange={(e) => setPrice(e.target.value)}
+              type="text"
+              id="product-price"
+              value={price}
+            />
+          </div>
+
+          <div className="input-group">
+            <label htmlFor="product-quantity">Quantity</label>
+            <input
+              onChange={(e) => setQuantity(e.target.value)}
+              type="text"
+              id="product-quantity"
+              value={quantity}
+            />
+          </div>
+
+          <div className="actions form-actions">
+            <a href="/#" onClick={handleSubmit} className="button">
+              Add
+            </a>
+            <a href="/#" onClick={handleToggleForm} className="button">
+              Cancel
+            </a>
+          </div>
+        </form>
+      </div>
+    );
+  }
 };
 
 export default AddForm;

@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-// import userEvent from "@testing-library/user-event";
+import userEvent from "@testing-library/user-event";
 import AddForm from "../components/AddForm";
 
 describe("AddForm", () => {
@@ -8,9 +8,30 @@ describe("AddForm", () => {
     func = jest.fn();
     render(<AddForm onAddProduct={func} />);
   });
-  it("shows an 'Add a Product' anchor button by default", () => {
-    const anchor = screen.getAllByRole("link", { name: "Add A Product" });
+
+  it("shows 'Add a Product' anchor button by default", () => {
+    const anchor = screen.getByRole("link", { name: "Add A Product" });
     expect(anchor).toBeInTheDocument();
+  });
+
+  it("shows form when 'Add a Product' anchor button clicked", () => {
+    const anchor = screen.getByRole("link", { name: "Add A Product" });
+    userEvent.click(anchor);
+    const submitAnchor = screen.getByRole("link", { name: "Add" });
+    expect(submitAnchor).toBeInTheDocument();
+  });
+
+  describe("with form visible", () => {
+    beforeEach(() => {
+      const anchor = screen.getByRole("link", { name: "Add A Product" });
+      userEvent.click(anchor);
+    });
+
+    it("onAddProduct called when anchor button clicked", () => {
+      const anchor = screen.getByRole("link", { name: "Add" });
+      userEvent.click(anchor);
+      expect(func.mock.calls.length).toBe(1);
+    });
   });
 });
 
