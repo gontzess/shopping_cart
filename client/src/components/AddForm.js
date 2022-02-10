@@ -1,19 +1,30 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import axios from "axios";
 
-const AddForm = ({ onAddProduct }) => {
+const AddForm = () => {
   const [showForm, updateShowForm] = useState(false);
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
+  const dispatch = useDispatch();
 
   const handleToggleForm = (e) => {
     e.preventDefault();
     updateShowForm(!showForm);
   };
 
-  const handleSubmit = (e) => {
+  const handleAddProduct = async (e) => {
     e.preventDefault();
-    onAddProduct({ title, price, quantity });
+    const response = await axios.post("/api/products", { title, price, quantity });
+    const newProduct = response.data;
+    resetForm();
+    dispatch({ type: "PRODUCT_ADDED", payload: newProduct })
+
+    // updateProductData(productData.concat(newProduct));
+  };
+
+  const resetForm = () => {
     setTitle("");
     setPrice("");
     setQuantity("");
@@ -70,7 +81,7 @@ const AddForm = ({ onAddProduct }) => {
           </div>
 
           <div className="actions form-actions">
-            <a href="/#" onClick={handleSubmit} className="button">
+            <a href="/#" onClick={handleAddProduct} className="button">
               Add
             </a>
             <a href="/#" onClick={handleToggleForm} className="button">

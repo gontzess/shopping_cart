@@ -1,20 +1,29 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 import Product from "./Product";
 
-const Products = ({
-  products,
-  onEditProduct,
-  onDeleteProduct,
-  onAddToCart,
-}) => {
+const Products = () => {
+  const dispatch = useDispatch();
+  const products = useSelector((store) => store.products);
+  
+  useEffect(() => {
+    const getProducts = async () => {
+      const response = await axios.get("/api/products");
+      const data = response.data;
+      dispatch({ type: "PRODUCTS_RECEIVED", payload: data });
+    };
+    getProducts();
+  }, [dispatch]);
+
+
+
   return (
     <div className="product-listing">
       <h2>Products</h2>
       {products.map((product) => {
         return (
           <Product
-            onAddToCart={onAddToCart}
-            onEditProduct={onEditProduct}
-            onDeleteProduct={onDeleteProduct}
             key={product._id}
             product={product}
           />

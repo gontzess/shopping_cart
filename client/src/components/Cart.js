@@ -1,10 +1,25 @@
-const Cart = ({ cartData, onCheckout }) => {
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import axios from "axios";
+
+const Cart = ({ onCheckout }) => {
+  const dispatch = useDispatch();
+  const cartItems = useSelector((store) => store.cartItems)
   const handleCheckout = (e) => {
     e.preventDefault();
     onCheckout();
   };
 
-  if (cartData.length === 0) {
+  useEffect(() => {
+    const getCart = async () => {
+      const response = await axios.get("/api/cart");
+      const data = response.data;
+      dispatch({type: "CART_ITEMS_RECEIVED", payload: data})
+    };
+    getCart();
+  }, [dispatch]);
+
+  if (cartItems.length === 0) {
     return (
       <div className="cart">
         <h2>Your Cart</h2>
@@ -26,7 +41,7 @@ const Cart = ({ cartData, onCheckout }) => {
               <th>Quantity</th>
               <th>Price</th>
             </tr>
-            {cartData.map((item) => (
+            {cartItems.map((item) => (
               <tr key={item._id}>
                 <td>{item.title}</td>
                 <td>{item.quantity}</td>
@@ -37,7 +52,7 @@ const Cart = ({ cartData, onCheckout }) => {
             <tr>
               <td colSpan="3" className="total">
                 Total: $
-                {cartData
+                {cartItems
                   .reduce((acc, item) => (acc += item.price), 0)
                   .toFixed(2)}
               </td>

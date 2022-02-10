@@ -1,19 +1,44 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import axios from "axios";
 import EditForm from "./EditForm";
 
-const Product = ({ product, onEditProduct, onDeleteProduct, onAddToCart }) => {
+const Product = ({ product }) => {
   const [showForm, setShowForm] = useState(false);
+  const dispatch = useDispatch();
+  // const cartItems = useSelector(store => store.cartItems)
+
+  const handleDeleteProduct = async (e) => {
+    e.preventDefault();
+    await axios.delete(`/api/products/${product._id}`);
+    dispatch({ type: "PRODUCT_DELETED", payload: product._id });
+  };
+
   const handleToggleForm = (e) => {
     e.preventDefault();
     setShowForm(!showForm);
   };
-  const handleDeleteProduct = (e) => {
+
+  // const handleAddToCart = (e) => {
+  //   e.preventDefault();
+  //   onAddToCart(product._id);
+  // };
+
+  const handleAddToCart = async (e) => {
     e.preventDefault();
-    onDeleteProduct(product._id);
-  };
-  const handleAddToCart = (e) => {
-    e.preventDefault();
-    onAddToCart(product._id);
+    const response = await axios.post("/api/add-to-cart", { productId: product._id });
+    const cartItem = response.data.item;
+    dispatch({type: "CART_ITEM_ADDED", payload: cartItem})
+
+    // updateProductData(
+    //   productData.map((prod) => {
+    //     if (prod._id === product._id) {
+    //       return product;
+    //     } else {
+    //       return prod;
+    //     }
+    //   })
+    // );
   };
 
   return (
@@ -26,7 +51,6 @@ const Product = ({ product, onEditProduct, onDeleteProduct, onAddToCart }) => {
         </p>
         {showForm ? (
           <EditForm
-            onEditProduct={onEditProduct}
             onClose={handleToggleForm}
             product={product}
           />
