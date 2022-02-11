@@ -6,14 +6,9 @@ const Cart = () => {
   const dispatch = useDispatch();
   const cartItems = useSelector((store) => store.cartItems);
 
-  useEffect(() => {
-    const getCart = async () => {
-      dispatch(cartItemsReceived());
-    };
-    getCart();
-  }, [dispatch]);
+  useEffect(() => dispatch(cartItemsReceived()), [dispatch]);
 
-  const handleCheckout = async (e) => {
+  const handleCheckout = (e) => {
     e.preventDefault();
     dispatch(cartCheckout());
   };

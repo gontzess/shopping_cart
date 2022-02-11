@@ -14,7 +14,7 @@ const AddForm = () => {
     updateShowForm(!showForm);
   };
 
-  const handleAddProduct = async (e) => {
+  const handleAddProduct = (e) => {
     e.preventDefault();
     resetForm();
     dispatch(

@@ -8,7 +8,7 @@ const EditForm = ({ product, onClose }) => {
   const [quantity, setQuantity] = useState(product.quantity);
   const dispatch = useDispatch();
 
-  const handleEditProduct = async (e) => {
+  const handleEditProduct = (e) => {
     e.preventDefault();
     dispatch(productEdited(product._id, { title, price, quantity }));
     onClose(e);

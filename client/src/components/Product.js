@@ -8,7 +8,7 @@ const Product = ({ product }) => {
   const [showForm, setShowForm] = useState(false);
   const dispatch = useDispatch();
 
-  const handleDeleteProduct = async (e) => {
+  const handleDeleteProduct = (e) => {
     e.preventDefault();
     dispatch(productDeleted(product._id));
   };
@@ -18,7 +18,7 @@ const Product = ({ product }) => {
     setShowForm(!showForm);
   };
 
-  const handleAddToCart = async (e) => {
+  const handleAddToCart = (e) => {
     e.preventDefault();
     dispatch(cartItemAdded(product._id));
   };

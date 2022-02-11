@@ -7,12 +7,7 @@ const Products = () => {
   const dispatch = useDispatch();
   const products = useSelector((store) => store.products);
 
-  useEffect(() => {
-    const getProducts = async () => {
-      dispatch(productsReceived());
-    };
-    getProducts();
-  }, [dispatch]);
+  useEffect(() => dispatch(productsReceived()), [dispatch]);
 
   return (
     <div className="product-listing">
