@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios from "axios";
+import { productsReceived } from "../actions/productsActions";
 import Product from "./Product";
 
 const Products = () => {
@@ -9,9 +9,7 @@ const Products = () => {
 
   useEffect(() => {
     const getProducts = async () => {
-      const response = await axios.get("/api/products");
-      const data = response.data;
-      dispatch({ type: "PRODUCTS_RECEIVED", payload: data });
+      dispatch(productsReceived());
     };
     getProducts();
   }, [dispatch]);

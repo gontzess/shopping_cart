@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import axios from "axios";
+import { productAdded } from "../actions/productsActions";
 
 const AddForm = () => {
   const [showForm, updateShowForm] = useState(false);
@@ -16,14 +16,14 @@ const AddForm = () => {
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
-    const response = await axios.post("/api/products", {
-      title,
-      price,
-      quantity,
-    });
-    const newProduct = response.data;
     resetForm();
-    dispatch({ type: "PRODUCT_ADDED", payload: newProduct });
+    dispatch(
+      productAdded({
+        title,
+        price,
+        quantity,
+      })
+    );
   };
 
   const resetForm = () => {

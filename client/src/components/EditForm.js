@@ -1,6 +1,6 @@
 import { useState } from "react";
-import axios from "axios";
 import { useDispatch } from "react-redux";
+import { productEdited } from "../actions/productsActions";
 
 const EditForm = ({ product, onClose }) => {
   const [title, setTitle] = useState(product.title);
@@ -10,9 +10,7 @@ const EditForm = ({ product, onClose }) => {
 
   const handleEditProduct = async (e) => {
     e.preventDefault();
-    const response = await axios.put(`/api/products/${product._id}`, { title, price, quantity });
-    const updatedProduct = response.data;
-    dispatch({ type: "PRODUCT_EDITED", payload: updatedProduct });
+    dispatch(productEdited(product._id, { title, price, quantity }));
     onClose(e);
   };
 

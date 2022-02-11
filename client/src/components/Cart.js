@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
-import axios from "axios";
+import { cartCheckout, cartItemsReceived } from "../actions/cartActions";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -8,17 +8,14 @@ const Cart = () => {
 
   useEffect(() => {
     const getCart = async () => {
-      const response = await axios.get("/api/cart");
-      const data = response.data;
-      dispatch({ type: "CART_ITEMS_RECEIVED", payload: data });
+      dispatch(cartItemsReceived());
     };
     getCart();
   }, [dispatch]);
 
   const handleCheckout = async (e) => {
     e.preventDefault();
-    await axios.post("/api/checkout");
-    dispatch({ type: "CART_CHECKOUT" });
+    dispatch(cartCheckout());
   };
 
   if (cartItems.length === 0) {

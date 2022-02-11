@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import axios from "axios";
+import { productDeleted, cartItemAdded } from "../actions/productsActions";
+
 import EditForm from "./EditForm";
 
 const Product = ({ product }) => {
@@ -9,8 +10,7 @@ const Product = ({ product }) => {
 
   const handleDeleteProduct = async (e) => {
     e.preventDefault();
-    await axios.delete(`/api/products/${product._id}`);
-    dispatch({ type: "PRODUCT_DELETED", payload: product._id });
+    dispatch(productDeleted(product._id));
   };
 
   const handleToggleForm = (e) => {
@@ -20,11 +20,7 @@ const Product = ({ product }) => {
 
   const handleAddToCart = async (e) => {
     e.preventDefault();
-    const response = await axios.post("/api/add-to-cart", {
-      productId: product._id,
-    });
-    const cartItem = response.data.item;
-    dispatch({ type: "CART_ITEM_ADDED", payload: cartItem });
+    dispatch(cartItemAdded(product._id));
   };
 
   return (
