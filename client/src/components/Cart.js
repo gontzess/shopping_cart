@@ -2,22 +2,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 import axios from "axios";
 
-const Cart = ({ onCheckout }) => {
+const Cart = () => {
   const dispatch = useDispatch();
-  const cartItems = useSelector((store) => store.cartItems)
-  const handleCheckout = (e) => {
-    e.preventDefault();
-    onCheckout();
-  };
+  const cartItems = useSelector((store) => store.cartItems);
 
   useEffect(() => {
     const getCart = async () => {
       const response = await axios.get("/api/cart");
       const data = response.data;
-      dispatch({type: "CART_ITEMS_RECEIVED", payload: data})
+      dispatch({ type: "CART_ITEMS_RECEIVED", payload: data });
     };
     getCart();
   }, [dispatch]);
+
+  const handleCheckout = async (e) => {
+    e.preventDefault();
+    await axios.post("/api/checkout");
+    dispatch({ type: "CART_CHECKOUT" });
+  };
 
   if (cartItems.length === 0) {
     return (
@@ -53,7 +55,7 @@ const Cart = ({ onCheckout }) => {
               <td colSpan="3" className="total">
                 Total: $
                 {cartItems
-                  .reduce((acc, item) => (acc += item.price), 0)
+                  .reduce((acc, item) => (acc += item.price * item.quantity), 0)
                   .toFixed(2)}
               </td>
             </tr>

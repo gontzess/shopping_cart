@@ -6,7 +6,7 @@ import Product from "./Product";
 const Products = () => {
   const dispatch = useDispatch();
   const products = useSelector((store) => store.products);
-  
+
   useEffect(() => {
     const getProducts = async () => {
       const response = await axios.get("/api/products");
@@ -16,18 +16,11 @@ const Products = () => {
     getProducts();
   }, [dispatch]);
 
-
-
   return (
     <div className="product-listing">
       <h2>Products</h2>
       {products.map((product) => {
-        return (
-          <Product
-            key={product._id}
-            product={product}
-          />
-        );
+        return <Product key={product._id} product={product} />;
       })}
     </div>
   );

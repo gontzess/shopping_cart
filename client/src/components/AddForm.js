@@ -16,12 +16,14 @@ const AddForm = () => {
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
-    const response = await axios.post("/api/products", { title, price, quantity });
+    const response = await axios.post("/api/products", {
+      title,
+      price,
+      quantity,
+    });
     const newProduct = response.data;
     resetForm();
-    dispatch({ type: "PRODUCT_ADDED", payload: newProduct })
-
-    // updateProductData(productData.concat(newProduct));
+    dispatch({ type: "PRODUCT_ADDED", payload: newProduct });
   };
 
   const resetForm = () => {

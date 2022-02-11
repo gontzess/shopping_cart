@@ -1,12 +1,11 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import axios from "axios";
 import EditForm from "./EditForm";
 
 const Product = ({ product }) => {
   const [showForm, setShowForm] = useState(false);
   const dispatch = useDispatch();
-  // const cartItems = useSelector(store => store.cartItems)
 
   const handleDeleteProduct = async (e) => {
     e.preventDefault();
@@ -19,26 +18,13 @@ const Product = ({ product }) => {
     setShowForm(!showForm);
   };
 
-  // const handleAddToCart = (e) => {
-  //   e.preventDefault();
-  //   onAddToCart(product._id);
-  // };
-
   const handleAddToCart = async (e) => {
     e.preventDefault();
-    const response = await axios.post("/api/add-to-cart", { productId: product._id });
+    const response = await axios.post("/api/add-to-cart", {
+      productId: product._id,
+    });
     const cartItem = response.data.item;
-    dispatch({type: "CART_ITEM_ADDED", payload: cartItem})
-
-    // updateProductData(
-    //   productData.map((prod) => {
-    //     if (prod._id === product._id) {
-    //       return product;
-    //     } else {
-    //       return prod;
-    //     }
-    //   })
-    // );
+    dispatch({ type: "CART_ITEM_ADDED", payload: cartItem });
   };
 
   return (
@@ -50,10 +36,7 @@ const Product = ({ product }) => {
           {product.quantity} left in stock
         </p>
         {showForm ? (
-          <EditForm
-            onClose={handleToggleForm}
-            product={product}
-          />
+          <EditForm onClose={handleToggleForm} product={product} />
         ) : (
           <div className="actions product-actions">
             <a
