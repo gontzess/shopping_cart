@@ -1,19 +1,31 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { addCartItem, CartContext } from "../context/cart-context";
+import {
+  ProductContext,
+  deleteProduct,
+  decrementProductQuantity,
+} from "../context/product-context";
 import EditForm from "./EditForm";
 
-const Product = ({ product, onEditProduct, onDeleteProduct, onAddToCart }) => {
+const Product = ({ product, onAddToCart }) => {
   const [showForm, setShowForm] = useState(false);
+  const { dispatch: productDispatch } = useContext(ProductContext);
+  const { dispatch: cartDispatch } = useContext(CartContext);
+
   const handleToggleForm = (e) => {
     e.preventDefault();
     setShowForm(!showForm);
   };
+
   const handleDeleteProduct = (e) => {
     e.preventDefault();
-    onDeleteProduct(product._id);
+    deleteProduct(productDispatch, product._id);
   };
+
   const handleAddToCart = (e) => {
     e.preventDefault();
-    onAddToCart(product._id);
+    addCartItem(cartDispatch, product._id);
+    decrementProductQuantity(productDispatch, product._id);
   };
 
   return (
@@ -25,11 +37,7 @@ const Product = ({ product, onEditProduct, onDeleteProduct, onAddToCart }) => {
           {product.quantity} left in stock
         </p>
         {showForm ? (
-          <EditForm
-            onEditProduct={onEditProduct}
-            onClose={handleToggleForm}
-            product={product}
-          />
+          <EditForm onClose={handleToggleForm} product={product} />
         ) : (
           <div className="actions product-actions">
             <a

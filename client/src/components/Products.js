@@ -1,11 +1,14 @@
+import { useContext, useEffect } from "react";
+import { getProducts, ProductContext } from "../context/product-context";
 import Product from "./Product";
 
-const Products = ({
-  products,
-  onEditProduct,
-  onDeleteProduct,
-  onAddToCart,
-}) => {
+const Products = ({ onAddToCart }) => {
+  const { products, dispatch } = useContext(ProductContext);
+
+  useEffect(() => {
+    getProducts(dispatch);
+  }, [dispatch]);
+
   return (
     <div className="product-listing">
       <h2>Products</h2>
@@ -13,8 +16,6 @@ const Products = ({
         return (
           <Product
             onAddToCart={onAddToCart}
-            onEditProduct={onEditProduct}
-            onDeleteProduct={onDeleteProduct}
             key={product._id}
             product={product}
           />

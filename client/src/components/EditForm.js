@@ -1,14 +1,16 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { editProduct, ProductContext } from "../context/product-context";
 
-const EditForm = ({ product, onClose, onEditProduct }) => {
+const EditForm = ({ product, onClose }) => {
   const [title, setTitle] = useState(product.title);
   const [price, setPrice] = useState(product.price);
   const [quantity, setQuantity] = useState(product.quantity);
+  const { dispatch } = useContext(ProductContext);
 
-  const handleSubmit = (e) => {
+  const handleEditProduct = (e) => {
     e.preventDefault();
-    onEditProduct(product._id, { title, price, quantity });
-    onClose();
+    editProduct(dispatch, product._id, { title, price, quantity });
+    onClose(e);
   };
 
   return (
@@ -46,7 +48,7 @@ const EditForm = ({ product, onClose, onEditProduct }) => {
         </div>
 
         <div className="actions form-actions">
-          <a href="/#" className="button" onClick={handleSubmit}>
+          <a href="/#" className="button" onClick={handleEditProduct}>
             Update
           </a>
           <a href="/#" className="button" onClick={onClose}>

@@ -1,10 +1,22 @@
-const Cart = ({ cartData, onCheckout }) => {
+import { useContext, useEffect } from "react";
+import {
+  getCartItems,
+  CartContext,
+  checkoutCart,
+} from "../context/cart-context";
+
+const Cart = () => {
+  const { cartItems, dispatch } = useContext(CartContext);
+  useEffect(() => {
+    getCartItems(dispatch);
+  }, [dispatch]);
+
   const handleCheckout = (e) => {
     e.preventDefault();
-    onCheckout();
+    checkoutCart(dispatch);
   };
 
-  if (cartData.length === 0) {
+  if (cartItems.length === 0) {
     return (
       <div className="cart">
         <h2>Your Cart</h2>
@@ -26,7 +38,7 @@ const Cart = ({ cartData, onCheckout }) => {
               <th>Quantity</th>
               <th>Price</th>
             </tr>
-            {cartData.map((item) => (
+            {cartItems.map((item) => (
               <tr key={item._id}>
                 <td>{item.title}</td>
                 <td>{item.quantity}</td>
@@ -37,8 +49,8 @@ const Cart = ({ cartData, onCheckout }) => {
             <tr>
               <td colSpan="3" className="total">
                 Total: $
-                {cartData
-                  .reduce((acc, item) => (acc += item.price), 0)
+                {cartItems
+                  .reduce((acc, item) => (acc += item.price * item.quantity), 0)
                   .toFixed(2)}
               </td>
             </tr>

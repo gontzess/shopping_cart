@@ -1,23 +1,30 @@
 import { useState } from "react";
+import { useContext } from "react";
+import { ProductContext, addProduct } from "../context/product-context";
 
-const AddForm = ({ onAddProduct }) => {
+const AddForm = () => {
   const [showForm, updateShowForm] = useState(false);
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
+  const { dispatch } = useContext(ProductContext);
 
   const handleToggleForm = (e) => {
     e.preventDefault();
     updateShowForm(!showForm);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onAddProduct({ title, price, quantity });
+  const resetForm = () => {
     setTitle("");
     setPrice("");
     setQuantity("");
     updateShowForm(!showForm);
+  };
+
+  const handleAddProduct = (e) => {
+    e.preventDefault();
+    addProduct(dispatch, { title, price, quantity });
+    resetForm();
   };
 
   if (!showForm) {
@@ -70,7 +77,7 @@ const AddForm = ({ onAddProduct }) => {
           </div>
 
           <div className="actions form-actions">
-            <a href="/#" onClick={handleSubmit} className="button">
+            <a href="/#" onClick={handleAddProduct} className="button">
               Add
             </a>
             <a href="/#" onClick={handleToggleForm} className="button">
